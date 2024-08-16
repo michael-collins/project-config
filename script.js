@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const sheetID = 'YOUR_SHEET_ID'; // Replace with your Google Sheets ID
+    const sheetID = '1uy45MjTUKoBwrSW63XEE3SYFv-oS2oRJToDQC_Az_Es'; // Replace with your Google Sheets ID
     const apiKey = 'YOUR_API_KEY'; // Replace with your API Key
-    const projectRange = 'Sheet1!A2:A10'; // Adjust the range to match your data
-    const specializationRange = 'Sheet1!B2:B10'; // Adjust the range to match your data
+    const projectRange = 'List Definitions!A2:A100'; // Adjust the range to match your data
+    const specializationRange = 'List Definitions!F2:F100'; // Adjust the range to match your data
 
     const projectUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${projectRange}?key=${apiKey}`;
     const specializationUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${specializationRange}?key=${apiKey}`;
