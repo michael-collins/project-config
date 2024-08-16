@@ -1,72 +1,39 @@
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('project_schedule.csv')
-        .then(response => response.text())
-        .then(csvText => {
-            // Split the CSV into lines and use PapaParse to handle the data
-            Papa.parse(csvText, {
-                complete: function(results) {
-                    const data = results.data;
+    const sheetID = 'YOUR_SHEET_ID'; // Replace with your Google Sheets ID
+    const apiKey = 'YOUR_API_KEY'; // Replace with your API Key
+    const projectRange = 'Sheet1!A2:A10'; // Adjust the range to match your data
+    const specializationRange = 'Sheet1!B2:B10'; // Adjust the range to match your data
 
-                    const projectTitle = data[1][2].trim();
-                    const specializationTag = data[2][2].trim();
-                    const scheduleHeader = data[5].slice(1);
-                    const productionTitles = data[6].slice(1);
-                    const productionOverview = data[7].slice(1);
-                    const deliverables = data[8].slice(1);
-                    const lectures = data[14].slice(1);
-                    const exercises = data[18].slice(1);
+    const projectUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${projectRange}?key=${apiKey}`;
+    const specializationUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${specializationRange}?key=${apiKey}`;
 
-                    // Set the project title and specialization tag
-                    document.getElementById('project-title').textContent = `Project: ${projectTitle}`;
-                    document.getElementById('specialization-tag').textContent = `Specialization Tag: ${specializationTag}`;
-
-                    // Select the container where the schedule will be rendered
-                    const projectScheduleContainer = document.getElementById('project-schedule');
-
-                    // Loop through each week to render the schedule
-                    for (let i = 0; i < scheduleHeader.length; i++) {
-                        const weekCard = document.createElement('div');
-                        weekCard.className = "bg-white shadow-md rounded p-6 mb-4";
-
-                        const weekTitle = document.createElement('h2');
-                        weekTitle.className = "text-xl font-bold mb-2";
-                        weekTitle.textContent = `${scheduleHeader[i]}: ${productionTitles[i]}`;
-                        weekCard.appendChild(weekTitle);
-
-                        const overview = document.createElement('p');
-                        overview.className = "text-gray-700 mb-4";
-                        overview.textContent = productionOverview[i];
-                        weekCard.appendChild(overview);
-
-                        const deliverablesList = document.createElement('ul');
-                        deliverablesList.className = "list-disc pl-5 mb-4";
-
-                        if (deliverables[i]) {
-                            const deliverableItem = document.createElement('li');
-                            deliverableItem.textContent = `Deliverables: ${deliverables[i]}`;
-                            deliverablesList.appendChild(deliverableItem);
-                        }
-
-                        if (lectures[i]) {
-                            const lectureItem = document.createElement('li');
-                            lectureItem.textContent = `Lecture/Quiz: ${lectures[i]}`;
-                            deliverablesList.appendChild(lectureItem);
-                        }
-
-                        if (exercises[i]) {
-                            const exerciseItem = document.createElement('li');
-                            exerciseItem.textContent = `Mastery Exercises: ${exercises[i]}`;
-                            deliverablesList.appendChild(exerciseItem);
-                        }
-
-                        weekCard.appendChild(deliverablesList);
-
-                        projectScheduleContainer.appendChild(weekCard);
-                    }
-                },
-                header: false,
-                skipEmptyLines: true
+    // Fetch project data
+    axios.get(projectUrl)
+        .then(response => {
+            const projectData = response.data.values;
+            const projectDropdown = document.getElementById('project');
+            projectData.forEach(row => {
+                const option = document.createElement('option');
+                option.value = row[0];
+                option.textContent = row[0];
+                projectDropdown.appendChild(option);
             });
         })
-        .catch(error => console.error('Error fetching the CSV file:', error));
+        .catch(error => console.error('Error fetching project data:', error));
+
+    // Fetch specialization data
+    axios.get(specializationUrl)
+        .then(response => {
+            const specializationData = response.data.values;
+            const specializationDropdown = document.getElementById('specialization');
+            specializationData.forEach(row => {
+                const option = document.createElement('option');
+                option.value = row[0];
+                option.textContent = row[0];
+                specializationDropdown.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching specialization data:', error));
+
+    // Repeat similar blocks for other dropdowns, like for weeks and deliverables
 });
