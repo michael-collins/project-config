@@ -2,23 +2,28 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch('project_schedule.csv')
         .then(response => response.text())
         .then(csvText => {
+            // Split the CSV into lines and use PapaParse to handle the data
             Papa.parse(csvText, {
                 complete: function(results) {
-                    const lines = results.data;
-                    const projectTitle = lines[1][2].trim();
-                    const specializationTag = lines[2][2].trim();
-                    const scheduleHeader = lines[5].slice(1);
-                    const productionTitles = lines[6].slice(1);
-                    const productionOverview = lines[7].slice(1);
-                    const deliverables = lines[8].slice(1);
-                    const lectures = lines[14].slice(1);
-                    const exercises = lines[18].slice(1);
+                    const data = results.data;
 
+                    const projectTitle = data[1][2].trim();
+                    const specializationTag = data[2][2].trim();
+                    const scheduleHeader = data[5].slice(1);
+                    const productionTitles = data[6].slice(1);
+                    const productionOverview = data[7].slice(1);
+                    const deliverables = data[8].slice(1);
+                    const lectures = data[14].slice(1);
+                    const exercises = data[18].slice(1);
+
+                    // Set the project title and specialization tag
                     document.getElementById('project-title').textContent = `Project: ${projectTitle}`;
                     document.getElementById('specialization-tag').textContent = `Specialization Tag: ${specializationTag}`;
 
+                    // Select the container where the schedule will be rendered
                     const projectScheduleContainer = document.getElementById('project-schedule');
 
+                    // Loop through each week to render the schedule
                     for (let i = 0; i < scheduleHeader.length; i++) {
                         const weekCard = document.createElement('div');
                         weekCard.className = "bg-white shadow-md rounded p-6 mb-4";
