@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const sheetID = '1uy45MjTUKoBwrSW63XEE3SYFv-oS2oRJToDQC_Az_Es'; // Replace with your Google Sheets ID
-    const apiKey = 'YOUR_API_KEY'; // Replace with your API Key
+    const apiKey = 'AIzaSyBUdA3vB_d7N_GiToAd7Gk4ivs5QooHRXE'; // Replace with your API Key
     const projectRange = 'List Definitions!A2:A100'; // Adjust the range to match your data
     const specializationRange = 'List Definitions!F2:F100'; // Adjust the range to match your data
 
